@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Control de Temperatura – LM35 + Arduino (MOSFET)</title>
+  <link rel="stylesheet" href="../web/styles.css" />
+</head>
+<body>
+  <div class="card">
+    <h1>Control de Temperatura – LM35 + Arduino (MOSFET)</h1>
+
+    <div class="row">
+      <div class="col">
+        <button id="btnConnect">Conectar</button>
+        <button id="btnDisconnect" class="secondary" disabled>Desconectar</button>
+      </div>
+      <div class="col">
+        <div id="status" class="badge">Sin conexión</div>
+      </div>
+    </div>
+
+    <div class="row stats">
+      <div class="col">
+        <h2>Temperatura Real</h2>
+        <div id="tReal" class="stat">— °C</div>
+      </div>
+      <div class="col">
+        <h2>Setpoint</h2>
+        <div id="tSP" class="stat">— °C</div>
+      </div>
+      <div class="col">
+        <h2>Modo</h2>
+        <div id="mode" class="badge">—</div>
+      </div>
+    </div>
+
+    <div class="row form">
+      <div class="col">
+        <label for="inpSP">Cambiar Setpoint (30.0–50.0 °C)</label>
+        <input id="inpSP" type="number" min="30" max="50" step="0.1" placeholder="Ej. 37.0" />
+      </div>
+      <div class="col btn-col">
+        <button id="btnSetSP" disabled>Enviar Setpoint</button>
+      </div>
+    </div>
+
+    <div class="log" id="log"></div>
+
+    <div class="footer">
+      <small>Abre en Chrome/Edge. Web Serial requiere <code>localhost</code> (o HTTPS).</small>
+    </div>
+  </div>
+
+  <script src="../web/app.js"></script>
+</body>
+</html>
