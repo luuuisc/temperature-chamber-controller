@@ -16,7 +16,7 @@ const int PIN_FAN    = 5;   // Gate MOSFET FAN  (active-HIGH)
 
 // --------- Control --------
 float setpointC = 37.0;     // °C inicial
-float hyst      = 1.0;      // histéresis +/- °C (MOSFET: 1.0–1.5 recomendable)
+float hyst      = 0.5;      // histéresis +/- °C (MOSFET: 0.5–1.5 recomendable)
 
 // Calibración LM35
 const float CAL_OFFSET = 0.0;   // °C (ajusta tras comparar con termómetro)
