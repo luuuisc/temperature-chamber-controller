@@ -1,11 +1,20 @@
 const btnConnect = document.getElementById('btnConnect');
 const btnDisconnect = document.getElementById('btnDisconnect');
 const btnSetSP = document.getElementById('btnSetSP');
+const btnSetKpF = document.getElementById('btnSetKpF');
+const btnSetKpV = document.getElementById('btnSetKpV');
+
 const statusEl = document.getElementById('status');
 const tRealEl = document.getElementById('tReal');
 const tSPEl = document.getElementById('tSP');
 const modeEl = document.getElementById('mode');
+const pwmHEl = document.getElementById('pwmH');
+const pwmFEl = document.getElementById('pwmF');
+
 const inpSP = document.getElementById('inpSP');
+const inpKpF = document.getElementById('inpKpF');
+const inpKpV = document.getElementById('inpKpV');
+
 const logEl = document.getElementById('log');
 
 let port = null, reader = null, writer = null, keepReading = false;
@@ -44,6 +53,9 @@ async function connect(){
     btnConnect.disabled = true;
     btnDisconnect.disabled = false;
     btnSetSP.disabled = false;
+    btnSetKpF.disabled = false;
+    btnSetKpV.disabled = false;
+
     setStatus('Conectado', true);
     log('Conectado al puerto serie.');
 
@@ -61,7 +73,8 @@ async function disconnect(){
     if(writer){ writer.releaseLock(); writer=null; }
     if(port){ await port.close(); port=null; }
   }catch(err){ console.error(err); log('Error al desconectar: '+err.message); }
-  btnConnect.disabled=false; btnDisconnect.disabled=true; btnSetSP.disabled=true;
+  btnConnect.disabled=false; btnDisconnect.disabled=true;
+  btnSetSP.disabled=true; btnSetKpF.disabled=true; btnSetKpV.disabled=true;
   setStatus('Desconectado'); log('Puerto cerrado.');
 }
 
@@ -85,9 +98,19 @@ async function readLoop(){
 function handleLine(line){
   try{
     const obj = JSON.parse(line);
+
     if(typeof obj.t === 'number') tRealEl.textContent = obj.t.toFixed(2)+' °C';
-    if(typeof obj.sp === 'number'){ tSPEl.textContent = obj.sp.toFixed(2)+' °C'; if(!inpSP.value) inpSP.value = obj.sp.toFixed(1); }
+    if(typeof obj.sp === 'number'){
+      tSPEl.textContent = obj.sp.toFixed(2)+' °C';
+      if(!inpSP.value) inpSP.value = obj.sp.toFixed(1);
+    }
+    if(typeof obj.pwmH === 'number') pwmHEl.textContent = obj.pwmH.toFixed(1)+' %';
+    if(typeof obj.pwmF === 'number') pwmFEl.textContent = obj.pwmF.toFixed(1)+' %';
+    if(typeof obj.kpF === 'number' && !inpKpF.value) inpKpF.value = obj.kpF.toFixed(1);
+    if(typeof obj.kpV === 'number' && !inpKpV.value) inpKpV.value = obj.kpV.toFixed(1);
+
     if(obj.mode) setModeBadge(obj.mode);
+
     log('RX: '+line);
   }catch{
     log('RX(text): '+line);
@@ -103,7 +126,28 @@ async function sendSetpoint(){
   log('TX: '+cmd.trim());
 }
 
+async function sendKpF(){
+  if(!writer) return;
+  const v = parseFloat((inpKpF.value||'').replace(',','.'));
+  if(isNaN(v) || v<1 || v>10){ alert('KpF fuera de rango [1–10]'); return; }
+  const cmd = `KPF=${v.toFixed(1)}\n`;
+  await writer.write(cmd);
+  log('TX: '+cmd.trim());
+}
+
+async function sendKpV(){
+  if(!writer) return;
+  const v = parseFloat((inpKpV.value||'').replace(',','.'));
+  if(isNaN(v) || v<1 || v>10){ alert('KpV fuera de rango [1–10]'); return; }
+  const cmd = `KPV=${v.toFixed(1)}\n`;
+  await writer.write(cmd);
+  log('TX: '+cmd.trim());
+}
+
 btnConnect.addEventListener('click', connect);
 btnDisconnect.addEventListener('click', disconnect);
 btnSetSP.addEventListener('click', sendSetpoint);
+btnSetKpF.addEventListener('click', sendKpF);
+btnSetKpV.addEventListener('click', sendKpV);
+
 window.addEventListener('beforeunload', ()=>{ if(port) disconnect(); });

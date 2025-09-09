@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Control de Temperatura</title>
+  <title>Control de Temperatura con PWN</title>
   <link rel="stylesheet" href="../web/styles.css" />
 </head>
 <body>
   <div class="card">
-    <h1>Control de Temperatura</h1>
+    <h1>Control de Temperatura con PWM</h1>
 
     <div class="row">
-      <div class="col">
+      <div class="col"> 
         <button id="btnConnect">Conectar</button>
         <button id="btnDisconnect" class="secondary" disabled>Desconectar</button>
       </div>
@@ -26,12 +26,23 @@
         <div id="tReal" class="stat">— °C</div>
       </div>
       <div class="col">
-        <h2>Setpoint</h2>
+        <h2>Temperatura Deseada</h2>
         <div id="tSP" class="stat">— °C</div>
       </div>
       <div class="col">
         <h2>Modo</h2>
         <div id="mode" class="badge">—</div>
+      </div>
+    </div>
+
+    <div class="row stats">
+      <div class="col">
+        <h2>PWM Foco (HEAT)</h2>
+        <div id="pwmH" class="stat">0.0 %</div>
+      </div>
+      <div class="col">
+        <h2>PWM Ventilador (FAN)</h2>
+        <div id="pwmF" class="stat">0.0 %</div>
       </div>
     </div>
 
@@ -43,6 +54,38 @@
       <div class="col btn-col">
         <button id="btnSetSP" disabled>Enviar Setpoint</button>
       </div>
+    </div>
+
+    <!-- Controles KpF / KpV con botones alineados -->
+    <div class="row form">
+      <div class="col">
+        <label for="inpKpF">KpF (Foco) [1–10]</label>
+        <input id="inpKpF" type="number" min="1" max="10" step="0.1" placeholder="Ej. 5.0" />
+      </div>
+      <div class="col btn-col">
+        <button id="btnSetKpF" disabled>Enviar KpF</button>
+      </div>
+
+      <div class="col">
+        <label for="inpKpV">KpV (Ventilador) [1–10]</label>
+        <input id="inpKpV" type="number" min="1" max="10" step="0.1" placeholder="Ej. 5.0" />
+      </div>
+      <div class="col btn-col">
+        <button id="btnSetKpV" disabled>Enviar KpV</button>
+      </div>
+    </div>
+
+    <!-- Nota explicativa -->
+    <div class="note">
+      <strong>Nota:</strong>
+      <em>KpF</em> (proporcional del <b>foco</b>) controla cuánta potencia se aplica para calentar cuando
+      la temperatura real está por debajo del valor deseado.
+      <em>KpV</em> (proporcional del <b>ventilador</b>) controla la velocidad de enfriamiento cuando
+      la temperatura real supera el valor deseado.
+    </div>
+
+    <div class="subtle">
+      <strong>Banda muerta:</strong> ±2.0 °C (foco y ventilador apagados dentro de ese rango).
     </div>
 
     <div class="log" id="log"></div>

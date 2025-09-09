@@ -1,10 +1,17 @@
 :root{
   --ok-bg:#e6f4ea; --ok-fg:#1e7e34;
   --warn-bg:#fff3cd; --warn-fg:#8a6d3b;
+  --note-bg:#f6f8fa; --note-border:#e2e6ea;
 }
 *{box-sizing:border-box}
-body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;margin:24px}
-.card{border:1px solid #ddd;border-radius:14px;padding:16px;max-width:820px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+body{
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  margin:24px
+}
+.card{
+  border:1px solid #ddd;border-radius:14px;padding:16px;max-width:920px;
+  box-shadow:0 2px 12px rgba(0,0,0,.06)
+}
 .row{display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
 .col{flex:1;min-width:220px}
 h1{margin:0 0 8px;font-size:1.35rem}
@@ -21,8 +28,32 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .mode-IDLE{background:#eef5e5;color:#385723}
 .ok{background:var(--ok-bg);color:var(--ok-fg)}
 .warn{background:var(--warn-bg);color:var(--warn-fg)}
-.log{margin-top:12px;background:#fafafa;border:1px dashed #ccc;padding:10px;height:180px;overflow:auto;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.9rem;white-space:pre-wrap}
+
+.log{
+  margin-top:12px;background:#fafafa;border:1px dashed #ccc;
+  padding:10px;height:200px;overflow:auto;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:.9rem;white-space:pre-wrap
+}
 .footer{margin-top:8px;color:#666;font-size:.9rem}
-.btn-col{align-self:flex-end}
 .stats .col{min-width:180px}
-.form .col{min-width:260px}
+.form .col{min-width:220px}
+
+/* Asegura que los botones queden alineados con sus inputs */
+.form .btn-col{
+  display:flex;
+  align-items:flex-end;
+}
+
+/* Caja de nota explicativa */
+.note{
+  background:var(--note-bg);
+  border:1px solid var(--note-border);
+  border-radius:10px;
+  padding:10px 12px;
+  font-size:.92rem;
+  color:#222;
+  margin:6px 0 10px;
+}
+.note em{font-style:normal;font-weight:600}
+.subtle{font-size:.92rem;color:#444;margin:2px 0 8px}
